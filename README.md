@@ -7,3 +7,5 @@ A simple web project using Django, HTML,CSS to create a website where a user can
 <code>python3 manage.py makemigrations</code>
 <br />
 <code>python3 manage.py migrate</code>
+<br />
+<code>python3 manage.py runserver</code>
