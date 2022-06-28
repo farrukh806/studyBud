@@ -14,7 +14,7 @@ def home(request):
         query = ''
     rooms = Room.objects.filter(Q(topic__name__icontains=query) | Q(name__icontains=query)| Q(description__icontains=query))
     topics = Topic.objects.all()
-    context = {'rooms': rooms, 'topics': topics}
+    context = {'rooms': rooms, 'topics': topics, 'rooms_count':rooms.count()}
     return render(request, 'home.html', context)
 
 def room(request, pk):
