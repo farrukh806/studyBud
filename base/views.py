@@ -65,8 +65,11 @@ def home(request):
     if query == None:
         query = ''
     rooms = Room.objects.filter(Q(topic__name__icontains=query) | Q(name__icontains=query)| Q(description__icontains=query))
+   
     topics = Topic.objects.all()
-    context = {'rooms': rooms, 'topics': topics, 'rooms_count':rooms.count()}
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains=query))
+    context = {'rooms': rooms, 'topics': topics, 'rooms_count':rooms.count(), 'room_messages': room_messages}
+   
     return render(request, 'home.html', context)
 
 
@@ -124,3 +127,16 @@ def deleteRoom(request, pk):
         room.delete()
         return redirect('home')
     return render(request, 'delete.html', {'obj':room})
+
+
+@login_required(login_url='/login')
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=pk)
+
+    if request.user != message.user:
+        return HttpResponse('Access Denied!')
+    
+    if request.method == 'POST':
+        message.delete()
+        return redirect('home')
+    return render(request, 'delete.html', {'obj':message})
