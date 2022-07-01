@@ -106,12 +106,20 @@ def userProfile(request, pk):
 @login_required(login_url='/login')
 def createRoom(request):
     form = RoomForm()
+    topics = Topic.objects.all()
     if request.method == 'POST':
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
         form = RoomForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    context = {'form': form}
+        Room.objects.create(
+            host = request.user, 
+            topic = topic,
+            name = request.POST.get('name'),
+            description = request.POST.get('description')
+        )
+        return redirect('home')
+        
+    context = {'form': form, 'topics': topics}
     return render(request, 'room_form.html', context)
 
 
@@ -119,17 +127,20 @@ def createRoom(request):
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
-    
-    if request.user != room.host.username:
+    topics = Topic.objects.all()
+
+    if request.user.id != room.host.id:
         return HttpResponse('Access Denied!')
 
     if request.method == 'POST':
-        form = RoomForm(request.POST, instance=room)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-
-    context = { 'form' : form }
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        room.name = request.POST.get('name')
+        room.topic = topic
+        room.description = request.POST.get('description')
+        room.save()
+        return redirect('/room/' + str(room.id))
+    context = { 'form' : form, 'topics': topics, 'room': room}
     return render(request, 'room_form.html', context)
 
 
@@ -137,7 +148,7 @@ def updateRoom(request, pk):
 def deleteRoom(request, pk):
     room = Room.objects.get(id=pk)
 
-    if request.user != room.host.username:
+    if request.user.id != room.host.id:
         return HttpResponse('Access Denied!')
     
     if request.method == 'POST':
@@ -149,11 +160,11 @@ def deleteRoom(request, pk):
 @login_required(login_url='/login')
 def deleteMessage(request, pk):
     message = Message.objects.get(id=pk)
-
+   
     if request.user != message.user:
         return HttpResponse('Access Denied!')
     
     if request.method == 'POST':
         message.delete()
-        return redirect('home')
+        return redirect('/room/' + str(message.room.id))
     return render(request, 'delete.html', {'obj':message})
