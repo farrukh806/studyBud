@@ -16,3 +16,4 @@ A simple web project using Django, HTML,CSS to create a website where a user can
 <img src="./screenshots/register-page.png" width="600" alt="Register-page">
 <img src="./screenshots/room-page.png" width="600" alt="Room-page">
 <img src="./screenshots/new-room-page.png" width="600" alt="New-Room-page">
+<img src="./screenshots/profile-page.png" width="600" alt="Profile-page">
