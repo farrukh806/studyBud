@@ -11,9 +11,7 @@
 				class="roomListRoom__author"
 			>
 				<div class="avatar avatar--small">
-					<img
-						src="https://randomuser.me/api/portraits/women/11.jpg"
-					/>
+					<img src="{{ message.user.avatar.url }}" />
 				</div>
 				<p>
 					@{{ message.user }}
@@ -42,7 +40,8 @@
 		</div>
 		<div class="activities__boxContent">
 			<p>
-				replied to post “<a href="{% url 'room' message.room.id %}">{{message.room.name}}</a>”
+				replied to post “<a href="{% url 'room' message.room.id %}">{{message.room.name}}</a
+				>”
 			</p>
 			<div class="activities__boxRoomContent">
 				{{ message }}
