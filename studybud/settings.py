@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-(5)sha2jfvp)e2ky3crh&s$5)qomhqb6%424-4t_d!6)5_7p2t
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+# CORS_ALLOWED_ORIGINS = []
+CORS_ALLOW_ALL_ORIGINS =  True
 
 # Application definition
 
@@ -38,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'base.apps.BaseConfig'
+    'base.apps.BaseConfig',
+    'rest_framework',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = 'studybud.urls'
